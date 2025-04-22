@@ -8,6 +8,8 @@ def step_impl_get(context, endpoint):
 
 @then('the response status code should be {status_code:d}')
 def step_impl_status(context, status_code):
+    print("Actual status code:", context.response.status_code)
+    print("Response body:", context.response.text)
     assert context.response.status_code == status_code
 
 @then('the response should contain "{text}"')

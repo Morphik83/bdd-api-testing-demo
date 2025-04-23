@@ -1,0 +1,62 @@
+{
+	"info": {
+		"_postman_id": "044dfde3-e034-4a54-9f3b-662a42da68ea",
+		"name": "room_api_tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44362807",
+		"_collection_link": "https://johnycash-5516690.postman.co/workspace/545bc8ca-ae55-4723-8a73-89b09496c89b/collection/44362807-044dfde3-e034-4a54-9f3b-662a42da68ea?action=share&source=collection_link&creator=44362807"
+	},
+	"item": [
+		{
+			"name": "/booking - List all bookings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response schema is valid\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(booking) {\r",
+							"        pm.expect(booking).to.have.property('bookingid');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking"
+					]
+				},
+				"description": "This endpoint sends an HTTP GET request to retrieve booking information from the server. The response returned is a JSON array with a single object containing the \"bookingid\" field.\n\n``` json\n[\n    {\n        \"bookingid\": 0\n    }\n]\n\n ```"
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,24 @@
+version: 2.1
+
+jobs:
+  automated-api-tests:
+    docker:
+      - image: cimg/base:2021.04
+    steps:
+      - checkout
+      - run:
+          name: Install Postman CLI
+          command: |
+            curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - run:
+          name: Login using your API key
+          command: postman login --with-api-key $POSTMAN_API_KEY
+      - run:
+          name: Run Postman Collection
+          command: postman collection run "44362807-044dfde3-e034-4a54-9f3b-662a42da68ea"
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - automated-api-tests

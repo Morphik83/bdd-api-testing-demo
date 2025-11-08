@@ -1,5 +1,5 @@
-Feature: Booking API
-  Scenario: Get booking information
-    When I send a GET request to "/booking"
+Feature: Website
+  Scenario: Check website is up
+    When I send a GET request to "/"
     Then the response status code should be 200
-    And the response should contain "bookingid"
+    And the response should contain "Restful-booker-platform demo"

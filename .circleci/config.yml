@@ -1,24 +1,43 @@
 version: 2.1
 
+orbs:
+  node: circleci/node@5.0.2
+
 jobs:
-  automated-api-tests:
+  test:
     docker:
-      - image: cimg/base:2021.04
+      - image: cimg/node:lts-browsers
     steps:
       - checkout
+      
+      # Install Python for BDD tests
       - run:
-          name: Install Postman CLI
+          name: Install Python and dependencies
           command: |
-            curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+            sudo apt-get update
+            sudo apt-get install -y python3 python3-pip
+            pip3 install -r requirements.txt
+      
+      # Run BDD tests
       - run:
-          name: Login using your API key
-          command: postman login --with-api-key $POSTMAN_API_KEY
+          name: Run BDD tests
+          command: |
+            python -m behave
+      
+      # Install Newman for Postman collection tests
       - run:
-          name: Run Postman Collection
-          command: postman collection run "44362807-044dfde3-e034-4a54-9f3b-662a42da68ea"
+          name: Install Newman
+          command: |
+            sudo npm install -g newman
+      
+      # Run Postman collection tests
+      - run:
+          name: Run Postman Collection Tests
+          command: |
+            newman run ./postman/room_api_tests.postman_collection.json
 
 workflows:
   version: 2
-  test:
+  test-and-deploy:
     jobs:
-      - automated-api-tests
+      - test

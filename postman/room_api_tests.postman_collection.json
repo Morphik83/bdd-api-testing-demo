@@ -8,14 +8,13 @@
   },
   "item": [
     {
-      "name": "/room - Get room by ID",
+      "name": "Homepage - Check website is up",
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Response status code is 200\", function () {\\n  pm.response.to.have.status(200);\\n});\\n\\npm.test(\"Response has correct content type\", function () {\\n  pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html');\\n});\\n\\npm.test(\"Response time is less than 2000ms\", function () {\\n  pm.expect(pm.response.responseTime).to.be.below(2000);\\n});",
-              ""
+              "pm.test(\"Response status code is 200\", function () {\n  pm.response.to.have.status(200);\n});\n\npm.test(\"Response has correct content type\", function () {\n  pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html');\n});\n\npm.test(\"Response time is less than 2000ms\", function () {\n  pm.expect(pm.response.responseTime).to.be.below(2000);\n});"
             ],
             "type": "text/javascript",
             "packages": {}
@@ -31,18 +30,15 @@
           }
         ],
         "url": {
-          "raw": "https://automationintesting.online/room/1",
+          "raw": "https://automationintesting.online/",
           "protocol": "https",
           "host": [
             "automationintesting",
             "online"
           ],
-          "path": [
-            "room",
-            "1"
-          ]
+          "path": []
         },
-        "description": "This endpoint sends an HTTP GET request to retrieve room information from the server. The response is an HTML page.",
+        "description": "This endpoint sends an HTTP GET request to check if the website is up and running. The response should be an HTML page.",
         "response": []
       }
     }

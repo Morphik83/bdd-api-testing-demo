@@ -1,62 +1,61 @@
 version: 2.1
 
 orbs:
+  python: circleci/python@2.1.1
   node: circleci/node@5.0.2
 
 jobs:
   test:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: cimg/python:3.10
     steps:
       - checkout
       
-      # Set up Python virtual environment
-      - run:
-          name: Set up Python
-          command: |
-            python -m venv venv
-            . venv/bin/activate
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
+      # Set up Python
+      - python/install-packages:
+          pkg-manager: pip
+          app-dir: .
+          pip-dependency-file: requirements.txt
       
       # Run BDD tests
       - run:
           name: Run BDD tests
           command: |
-            . venv/bin/activate
-            python -m behave
+            python -m behave --no-capture
       
-      # Install Node.js and Newman
+      # Set up Node.js and Newman
+      - node/install:
+          install-yarn: false
+          node-version: '18'
+      
       - run:
-          name: Install Node.js and Newman
+          name: Install Newman
           command: |
-            curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-            sudo apt-get install -y nodejs
             sudo npm install -g newman
             newman --version
       
-      # Run Postman collection tests with error handling
+      # Run Postman collection tests
       - run:
           name: Run Postman Collection Tests
           command: |
-            # Create newman directory if it doesn't exist
-            mkdir -p newman
+            mkdir -p test-results/newman
             
-            # Run collection with detailed output and error handling
             if [ -f "postman/room_api_tests.postman_collection.json" ]; then
               echo "Running Postman collection..."
               newman run "postman/room_api_tests.postman_collection.json" \
                 --reporters cli,junit \
-                --reporter-junit-export "newman/results.xml" || echo "Postman tests failed, but continuing..."
+                --reporter-junit-export "test-results/newman/results.xml" \
+                || (echo "Postman tests failed" && exit 1)
             else
-              echo "Warning: Postman collection not found at postman/room_api_tests.postman_collection.json"
+              echo "Postman collection not found!"
+              exit 1
             fi
       
-      # Store test results
+      # Save test results
       - store_test_results:
-          path: newman
+          path: test-results
       - store_artifacts:
-          path: newman
+          path: test-results
 
 workflows:
   version: 2

@@ -1,46 +1,122 @@
 {
-  "info": {
-    "_postman_id": "044dfde3-e034-4a54-9f3b-662a42da68ea",
-    "name": "room_api_tests",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "44362807",
-    "_collection_link": "https://johnycash-5516690.postman.co/workspace/545bc8ca-ae55-4723-8a73-89b09496c89b/collection/44362807-044dfde3-e034-4a54-9f3b-662a42da68ea?action=share&source=collection_link&creator=44362807"
-  },
-  "item": [
-    {
-      "name": "Homepage - Check website is up",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Response status code is 200\", function () {\n  pm.response.to.have.status(200);\n});\n\npm.test(\"Response has correct content type\", function () {\n  pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html');\n});\n\npm.test(\"Response time is less than 2000ms\", function () {\n  pm.expect(pm.response.responseTime).to.be.below(2000);\n});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Accept",
-            "value": "text/html"
-          }
-        ],
-        "url": {
-          "raw": "https://automationintesting.online/",
-          "protocol": "https",
-          "host": [
-            "automationintesting",
-            "online"
-          ],
-          "path": []
-        },
-        "description": "This endpoint sends an HTTP GET request to check if the website is up and running. The response should be an HTML page.",
-        "response": []
-      }
-    }
-  ]
+	"info": {
+		"_postman_id": "bb62cca5-30a4-49d2-9fd2-41251eb78bf3",
+		"name": "room_api_tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40398638"
+	},
+	"item": [
+		{
+			"name": "/booking - List all bookings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response schema is valid\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(booking) {\r",
+							"        pm.expect(booking).to.have.property('bookingid');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking"
+					]
+				},
+				"description": "This endpoint sends an HTTP GET request to retrieve booking information from the server. The response returned is a JSON array with a single object containing the \"bookingid\" field.\n\n``` json\n[\n    {\n        \"bookingid\": 0\n    }\n]\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "/booking - Empy Request Validation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Check status code\r",
+							"pm.test(\"Status code is 400 Bad Request\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"// Test 2: Check Content-Type is present\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://automationintesting.online/api/message",
+					"protocol": "https",
+					"host": [
+						"automationintesting",
+						"online"
+					],
+					"path": [
+						"api",
+						"message"
+					]
+				}
+			},
+			"response": []
+		}
+	]
 }
